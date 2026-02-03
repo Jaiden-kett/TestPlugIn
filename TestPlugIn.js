@@ -1,5 +1,5 @@
 /*:
-* @plugindesc This is the first PlugIn
+* @plugindesc This is my first Plugin
 * @author Jaiden Kettleson
 *
 * @param Settings
@@ -53,4 +53,60 @@ var textVariableId = parseInt(tutorial_DialogSelectorParams("Text Variable"));
 var dialogList = JSON.parse(tutorial_DialogSelectorParams["Dialog List"]);
 var defaultDialog = tutorial_DialogSelectorParams("Default Dialog");
 
-var handleTestPlugIn_F
+
+var tutorialDialogSelectorGameInterpreter_pluginCommand = Game_Intrepreter.prototype.tutorialDialogSelectorGameInterpreter_pluginCommand;
+
+Game_Intrepreter.prototype.PlugInManager = function(command, args){
+    let matches = [];
+    if(command === "Tutorial.DialogSelector"){
+        for(let arg of args){
+            command += " " + args;
+        }
+
+        if(command.match(/Tutorial.DialogSelector[ ]Enable Dialog System[ ](?:(\w+)|(\d+)) /)){
+            matches = (/Tutorial.DialogSelector[ ]Enable Dialog System[ ](?:(\w+)|(\d+)) /).exec(command)|| [];
+            if(matches.length > 1){
+                $gameSystem.toggleDialogSystem(matches(1))
+            }
+        } else if(command.match(/Tutorial.DialogSelector[ ]GetDialog[ ](\d+)/).exec(command) || []);
+        if(matches.length > 1){
+            $gameSystem.setDialogVariable(matches(1));
+        }
+
+
+    } else{
+        tutorialDialogSelectorGameInterpreter_pluginCommand.call(this, args);
+    }
+}
+
+Game_System.prototype.toggleDialogSystem = function(dialogSystemEnabled){
+    let bSystemEnabled = false;
+    if(dialogSystemEnabled.constructor == String){
+        dialogSystemEnabled = dialogSystemEnabled.toLocaleLowerCase();
+    }
+
+    switch(dialogSystemEnabled){
+        case 1:
+        case "true":
+            bSystemEnabled = true;
+            break;
+        default:
+            break;
+    }
+
+    this.bDialogSystemEnabled = dialogSystemEnabled;
+}
+
+Game_System.prototype.isDialogSystemEnabled = function() {
+    return this.bDialogSystemEnabled == true;
+}
+
+$gameSystem.isDialogSystemEnabled(enableDialogSystem);
+
+Game_system.prototype.setDialogVariable() = function(index){
+    if(dialogList.length == 0 || dialogList.length <= index){
+        $gameVariables.setValue(textVariableId, defaultDialog);
+    } else {
+        $gameVariables.setValue(textVariableId, dialogList(index));
+    }
+}
