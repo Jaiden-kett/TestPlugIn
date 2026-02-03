@@ -52,3 +52,5 @@ var enableDialogSystem = (tutorial_DialogSelectorParams("Enable Dialog System") 
 var textVariableId = parseInt(tutorial_DialogSelectorParams("Text Variable"));
 var dialogList = JSON.parse(tutorial_DialogSelectorParams["Dialog List"]);
 var defaultDialog = tutorial_DialogSelectorParams("Default Dialog");
+
+var handleTestPlugIn_F
