@@ -2,6 +2,7 @@
 * @plugindesc This is my first Plugin
 * @author Jaiden Kettleson
 *
+*
 * @param Settings
 * @text Contains all of the main plugin settings
 *
@@ -16,7 +17,7 @@
 *
 *
 * @param Text Game Variable
-* #desc Assigns a game variable to be used to store dialog text
+* @desc Assigns a game variable to be used to store dialog text
 * @type variable
 * @default 1
 * @parent Settings
@@ -33,7 +34,6 @@
 * @parent Dialog Settings
 *
 *
-*
 * @param Default Dialog
 * @desc The dialog returned when an invalid value is used in the GetDialog plugIn command
 * @type text[]
@@ -43,9 +43,9 @@
 * @help
 * for more information on how to use this plugIn, please see the 
 * GitHub page:
-*
 * https://github.com/Jaiden-kett/TestPlugIn
 */
+
 
 var tutorial_DialogSelectorParams = PlugInManager.parameters("TestPlugIn");
 var enableDialogSystem = (tutorial_DialogSelectorParams("Enable Dialog System") === "true");
@@ -56,13 +56,13 @@ var defaultDialog = tutorial_DialogSelectorParams("Default Dialog");
 
 var tutorialDialogSelectorGameInterpreter_pluginCommand = Game_Intrepreter.prototype.tutorialDialogSelectorGameInterpreter_pluginCommand;
 
+
 Game_Intrepreter.prototype.PlugInManager = function(command, args){
     let matches = [];
     if(command === "Tutorial.DialogSelector"){
         for(let arg of args){
             command += " " + args;
         }
-
         if(command.match(/Tutorial.DialogSelector[ ]Enable Dialog System[ ](?:(\w+)|(\d+)) /)){
             matches = (/Tutorial.DialogSelector[ ]Enable Dialog System[ ](?:(\w+)|(\d+)) /).exec(command)|| [];
             if(matches.length > 1){
@@ -72,19 +72,17 @@ Game_Intrepreter.prototype.PlugInManager = function(command, args){
         if(matches.length > 1){
             $gameSystem.setDialogVariable(matches(1));
         }
-
-
     } else{
         tutorialDialogSelectorGameInterpreter_pluginCommand.call(this, args);
     }
 }
+
 
 Game_System.prototype.toggleDialogSystem = function(dialogSystemEnabled){
     let bSystemEnabled = false;
     if(dialogSystemEnabled.constructor == String){
         dialogSystemEnabled = dialogSystemEnabled.toLocaleLowerCase();
     }
-
     switch(dialogSystemEnabled){
         case 1:
         case "true":
@@ -93,17 +91,17 @@ Game_System.prototype.toggleDialogSystem = function(dialogSystemEnabled){
         default:
             break;
     }
-
     this.bDialogSystemEnabled = dialogSystemEnabled;
 }
+
 
 Game_System.prototype.isDialogSystemEnabled = function() {
     return this.bDialogSystemEnabled == true;
 }
-
 $gameSystem.isDialogSystemEnabled(enableDialogSystem);
 
-Game_system.prototype.setDialogVariable() = function(index){
+
+Game_system.prototype.setDialogVariable = function(index){
     if(dialogList.length == 0 || dialogList.length <= index){
         $gameVariables.setValue(textVariableId, defaultDialog);
     } else {
